@@ -4,6 +4,7 @@ use crate::{
     nix_log_bridge::NixLogBridge,
 };
 use async_trait::async_trait;
+use devenv_tui::tracing_interface::{operation_fields, operation_types};
 use futures::future;
 use miette::{IntoDiagnostic, Result, WrapErr, bail};
 use nix_conf_parser::NixConf;
@@ -921,9 +922,8 @@ impl Nix {
             };
 
             info!(
-                devenv.is_user_message = true,
-                "Using Cachix caches: {}",
-                caches.caches.pull.join(", "),
+                { operation_fields::TYPE } = operation_types::DEVENV,
+                { operation_fields::NAME } = format!("Using Cachix caches: {}", caches.caches.pull.join(", ")),
             );
             if !new_known_keys.is_empty() {
                 for (name, pubkey) in new_known_keys.iter() {

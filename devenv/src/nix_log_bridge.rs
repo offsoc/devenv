@@ -1,7 +1,7 @@
 use devenv_eval_cache::Op;
 use devenv_eval_cache::internal_log::{ActivityType, Field, InternalLog, ResultType, Verbosity};
 use devenv_tui::tracing_interface::{
-    nix_fields, operation_fields, operation_types, progress_events, status_events,
+    details_fields, nix_fields, operation_fields, operation_types, progress_events, status_events,
 };
 use std::collections::{HashMap, VecDeque};
 use std::sync::{Arc, Mutex};
@@ -195,7 +195,7 @@ impl NixLogBridge {
                     {
                         activity_info.span.in_scope(|| {
                             info!(
-                                { operation_fields::PHASE } = %phase,
+                                { details_fields::PHASE } = %phase,
                                 { status_events::fields::STATUS } = status_events::ACTIVE,
                                 "Build phase: {}", phase
                             );
@@ -261,8 +261,8 @@ impl NixLogBridge {
                     { operation_fields::TYPE } = operation_types::BUILD,
                     { operation_fields::NAME } = %derivation_name,
                     { operation_fields::SHORT_NAME } = %derivation_name,
-                    { operation_fields::DERIVATION } = %derivation_path,
-                    { operation_fields::MACHINE } = ?machine,
+                    { details_fields::DERIVATION } = %derivation_path,
+                    { details_fields::MACHINE } = ?machine,
                     { nix_fields::ACTIVITY_ID } = activity_id
                 );
                 span.in_scope(|| {
@@ -294,8 +294,8 @@ impl NixLogBridge {
                         { operation_fields::TYPE } = operation_types::QUERY,
                         { operation_fields::NAME } = %package_name,
                         { operation_fields::SHORT_NAME } = %package_name,
-                        { operation_fields::STORE_PATH } = %store_path,
-                        { operation_fields::SUBSTITUTER } = %substituter,
+                        { details_fields::STORE_PATH } = %store_path,
+                        { details_fields::SUBSTITUTER } = %substituter,
                         { nix_fields::ACTIVITY_ID } = activity_id
                     );
                     span.in_scope(|| {
@@ -329,8 +329,8 @@ impl NixLogBridge {
                         { operation_fields::TYPE } = operation_types::DOWNLOAD,
                         { operation_fields::NAME } = %package_name,
                         { operation_fields::SHORT_NAME } = %package_name,
-                        { operation_fields::STORE_PATH } = %store_path,
-                        { operation_fields::SUBSTITUTER } = %substituter,
+                        { details_fields::STORE_PATH } = %store_path,
+                        { details_fields::SUBSTITUTER } = %substituter,
                         { nix_fields::ACTIVITY_ID } = activity_id
                     );
                     span.in_scope(|| {
@@ -547,7 +547,7 @@ impl NixLogBridge {
                 {
                     activity_info.span.in_scope(|| {
                         info!(
-                            { operation_fields::PHASE } = %phase,
+                            { details_fields::PHASE } = %phase,
                             { status_events::fields::STATUS } = status_events::ACTIVE,
                             "Build phase: {}", phase
                         );
